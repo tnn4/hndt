@@ -1,0 +1,79 @@
+# Install latest ansible: https://www.cyberciti.biz/faq/how-to-install-and-configure-latest-version-of-ansible-on-ubuntu-linux/
+- name: Setup venv, Install python packages and cache items from HN api
+  hosts: all
+  vars:
+    version: "v0.1.5"
+    root_dir: "/home/{{ ansible_user_id }}/hn-data-tools-{{ version }}"
+  pre_tasks:
+    # - name: Setup directory
+    #   ansible.builtin.command: mkdir /usr/local/hn-data-tools-v0.1.4
+    #   become: true
+    #   become_user: root
+    - name: Setup dir
+      file:
+      # https://stackoverflow.com/questions/26394096/how-do-i-get-a-variable-with-the-name-of-the-user-running-ansible
+        path: /home/{{ ansible_user_id }}/hn-data-tools-{{ version }}
+        state: directory
+    #end
+    - name: Unzip
+      ansible.builtin.unarchive:
+        src: archive/hn-data-tools-{{ version }}.zip
+        # Linux standard place to install files?
+        dest: /home/{{ ansible_user_id }}/hn-data-tools-{{ version }}
+        # is file already located on remote system?
+        remote_src: no
+    #end
+    - name: Go to directory
+      # shell vs command https://stackoverflow.com/questions/56663332/difference-between-shell-and-command-in-ansible
+      ansible.builtin.shell:  cd /home/{{ ansible_user_id }}/hn-data-tools-{{ version }}
+    #end
+    
+    # see: https://stackoverflow.com/questions/63084049/sslerrorcant-connect-to-https-url-because-the-ssl-module-is-not-available
+    # https://stackoverflow.com/questions/54944080/installing-multiple-packages-in-ansible
+    - name: Install pip dependencies
+      become: yes
+      vars:
+        ansible_python_interpreter: /usr/bin/env python3
+      apt:
+        pkg:
+          - build-essential
+          - zlib1g-dev
+          - libncurses5-dev
+          - libgdbm-dev
+          - libnss3-dev
+          - libssl-dev
+          - libreadline-dev
+          - libffi-dev
+          - wget
+        update_cache: true
+
+    # Error here
+    # - name: Install venv
+    #   ansible.builtin.pip:
+    #     name: venv
+    #end
+    - name: Create virtual environment
+      ansible.builtin.command: python3 -m venv venv
+    
+    # Error: https://stackoverflow.com/questions/42792769/ansible-venv-activate-permission-denied-django-cms
+    # source is a bash/sh builtin
+    - name: Activate virtual environment
+      ansible.builtin.shell: . venv/bin/activate
+    
+    - name: Install sqlalchemy
+      ansible.builtin.command: python3 -m pip install sqlalchemy
+    #end
+  #end pre_tasks
+
+  #tasks:
+  #  - name: execute main
+  #    vars:
+  #      ansible_python_interpreter: "/usr/bin/env python3"
+  #    ansible.builtin.shell: cd {{ root_dir }} && nohup python3 main.py &
+#
+  #    register: out
+  #  # https://stackoverflow.com/questions/68221234/printing-command-stdout-on-console-during-runtime
+  #  - debug: msg="{{ out.stdout }}"
+#
+  #  - debug: msg="{{ out.stderr }}"
+  #end tasks

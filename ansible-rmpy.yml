@@ -1,0 +1,8 @@
+- name: uninstall python 3.12
+  hosts: all
+
+  tasks:
+    - name: Remove python3.12
+      become: yes
+      script: ./rmpy.sh
+  #end

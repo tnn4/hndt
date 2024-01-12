@@ -1,0 +1,25 @@
+# Install latest ansible: https://www.cyberciti.biz/faq/how-to-install-and-configure-latest-version-of-ansible-on-ubuntu-linux/
+- name: Install python packages and download from api
+  hosts: all
+  vars:
+    version: "v0.1.5"
+    root_dir: "/home/{{ ansible_user_id }}/hn-data-tools-{{ version }}"
+  
+  pre_tasks:
+    - name: Activate virtual environment
+      ansible.builtin.shell: . venv/bin/activate
+    - name: Install sqlalchemy
+      ansible.builtin.command: python3 -m pip install sqlalchemy
+    #end
+
+  tasks:
+    - name: execute main
+      vars:
+        ansible_python_interpreter: "/usr/bin/env python3"
+      ansible.builtin.shell: cd {{ root_dir }} && python3 main.py
+
+      register: out
+    # https://stackoverflow.com/questions/68221234/printing-command-stdout-on-console-during-runtime
+    - debug: msg="{{ out.stdout }}"
+
+    - debug: msg="{{ out.stderr }}"
