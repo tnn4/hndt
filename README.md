@@ -4,14 +4,14 @@ Tested on: PopOS 22.04 / Ubuntu 22.04
 
 Python tools for getting data from the [Hacker News API](https://github.com/HackerNews/API) and saving it to a [sqlite datbase](https://www.sqlite.org/) for data analysis, science, ML, AI, etc.
 
-Python Hacker News API Wrapper (PHNAW)
+Python Hacker News API Wrapper (hn.api)
 - Convenience API wrapper library for use with the Hacker News API
 
-Python Hacker News API Database (PHNDB)
+Python Hacker News API Database (hn.db)
 - Contains functions for taking API responses and caching into an SQL database for data analysis
 
 ```
-HN API <-> PHNAW <-Responses-> PHNAC <-> SQLite
+HN API <-> hn.api <-Responses-> hn.db <-> SQLite
 ```
 
 You can use this to build data sets from Hacker News.
