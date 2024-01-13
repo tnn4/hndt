@@ -27,6 +27,18 @@ python3 -m venv venv
 . venv/bin/activate
 python3 -m pip install sqlalchemy
 
+# install data analysis libraries
+
+# install nltk
+python3 -m pip install -U nltk
+python3
+# download required data e.g. stopwords
+>>> import nltk
+>>> nltk.download('stopwords')
+
+# install numpy
+python3 -m pip install -U numpy
+
 # verify endpoints
 python3 test_endpoints.py
 
