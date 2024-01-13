@@ -6,8 +6,8 @@ import time
 
 import random
 
-import phnaw.hnapi as hnapi
-import phnadb.db as hndb
+import hn.api as hnapi
+import hn.db as hndb
 
 import hn
 
