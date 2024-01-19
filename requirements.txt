@@ -1,0 +1,5 @@
+slqalchemy
+nltk
+numpy
+flask
+jinja2

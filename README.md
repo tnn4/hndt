@@ -25,6 +25,16 @@ You can use this to build data sets from Hacker News.
 python3 -m venv venv
 # Activate the virtual environments
 . venv/bin/activate
+
+python3 -m pip install -r requirements.txt
+
+# download required data e.g. stopwords
+python3
+>>> import nltk
+>>> nltk.download('stopwords')
+```
+
+```sh
 python3 -m pip install sqlalchemy
 
 # install data analysis libraries
