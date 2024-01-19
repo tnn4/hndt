@@ -1,5 +1,5 @@
 main() {
-    echo 'Bash: hello world!'
+    echo 'starting server'
     if [[ $# -eq 0 ]]
     then
         return
@@ -13,7 +13,7 @@ main() {
     done
 
     # Add your code here
-    python3 -m flask main run
+    python3 -m flask --app trending.py --debug run
 }
 
 main "$@"
