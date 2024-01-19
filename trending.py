@@ -63,20 +63,27 @@ def main(debug=False):
         print(top_items)
     #end
     
-    title_list = ""
-    
-    for json_item in top_items:
-        j = json.loads(json_item)
+    all_titles_string = ""
+    title_list = []
+    for item in top_items:
+        # j is json object
+        j = json.loads(item)
         if debug:
             print("title: " + j["title"])
         #end
-        title_list = title_list + "// " + j["title"]
+        all_titles_string = all_titles_string + " " + j["title"]
+        title_list.append(j["title"])
     #loop
     
-    print("title_list:" + title_list)
+    if debug:
+        for t in title_list:
+            print("title_list:" + t)
+        #end
+    #end
+    
     # Tokenize string
-    title_list = title_list.lower()
-    word_list = title_list.split()
+    title_list = all_titles_string.lower()
+    word_list = all_titles_string.split()
     # Filter for terms
     filtered_terms = [word for word in word_list if word not in stopwords.words('english')]
     
