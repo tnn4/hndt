@@ -55,6 +55,12 @@ chmod +x main.py && ./main.py
 nohup python3 <your-python-script> | tee log.txt &
 ```
 
+## Serve data you fetched over an API
+```
+# Make sure your venv is activated
+python3 -m pip install flask
+```
+
 ## Gathering data
 ```sh
 see: https://docs.python.org/3/library/venv.html

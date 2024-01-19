@@ -13,12 +13,22 @@ import hn
 
 import json
 
+from collections import Counter
+
 from nltk.corpus import stopwords
 
 def main():
+    # 500
+    NEW_ITEMS = 'new'
+    TOP_ITEMS = 'top'
+    BEST_ITEMS = 'best'
+    MAX_NEW_ITEMS = 500
+    MAX_TOP_ITEMS = 500
+    MAX_BEST_ITEMS = 500
+
     top_ids = hnapi.get_stories_as_list('top')
     # Show 10 items
-    top_items = hnapi.get_items_from_ids(top_ids)
+    top_items = hnapi.get_items_from_ids(top_ids,max_items=10)
     print(top_items)
     
     title_list = ""
@@ -39,6 +49,24 @@ def main():
     # Turn list back to string for printing
     filtered_string = ' '.join(t for t in filtered_terms)
     print("filtered terms: " + filtered_string)
+    
+    print(Counter(filtered_terms))
+    terms_as_dict_as_str = str(dict(Counter(filtered_terms)))
+    trending_terms = {
+        "trending": terms_as_dict_as_str
+    }
+    trending_terms_as_json = json.dumps(trending_terms) 
+    
+    # Write to dictionary to file
+    with open('hn-trending-terms.txt', 'w') as f:
+        f.write(str(dict(Counter(filtered_terms))))
+    #close
+    
+    # Write dictionary as Json to file
+    with open('hn-trending-terms.json', 'w') as f:
+        f.write(trending_terms_as_json)
+    #close
+    
     #hndb.create_database()
     # hn.cache_all_items()
     # hn.cache_posts('top')
