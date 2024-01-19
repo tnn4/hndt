@@ -28,7 +28,12 @@ def get_trending():
     return main()
 #end
 
-def main():
+def get_unique(ls):
+    unique_terms = set(ls)
+    return unique_terms
+#end
+
+def main(debug=False):
     # 500
     NEW_ITEMS = 'new'
     TOP_ITEMS = 'top'
@@ -40,13 +45,17 @@ def main():
     top_ids = hnapi.get_stories_as_list('top')
     # Show 10 items
     top_items = hnapi.get_items_from_ids(top_ids,max_items=10)
-    print(top_items)
+    if debug:
+        print(top_items)
+    #end
     
     title_list = ""
     
     for json_item in top_items:
         j = json.loads(json_item)
-        print("title: " + j["title"])
+        if debug:
+            print("title: " + j["title"])
+        #end
         title_list = title_list + " " + j["title"]
     #loop
     
@@ -61,14 +70,30 @@ def main():
     filtered_string = ' '.join(t for t in filtered_terms)
     print("filtered terms: " + filtered_string)
     
+    # filter for uniqueness
+    unique_filtered_terms = get_unique(filtered_terms)
+    unique_filtered_string = ', '.join(t for t in unique_filtered_terms)
+
     print(Counter(filtered_terms))
+    # don't send count
     terms_as_dict_as_str = str(dict(Counter(filtered_terms)))
-    trending_terms = {
+    
+    # Dict with trending terms with count
+    trending_terms_with_count = {
         "trending": terms_as_dict_as_str
     }
+
+    # Dict with uniquw trending terms
+    print("unique_filtered_string:" + unique_filtered_string)
+    trending_terms = {
+        "trending": unique_filtered_string
+    }
+
     # Transform dictionary to Json
-    trending_terms_as_json = json.dumps(trending_terms) 
+    trending_terms_with_count_as_json = json.dumps(trending_terms_with_count) 
     
+    trending_terms_as_json = json.dumps(trending_terms)
+
     # Write to dictionary to file
     with open('hn-trending-terms.txt', 'w') as f:
         f.write(str(dict(Counter(filtered_terms))))
