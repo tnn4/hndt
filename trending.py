@@ -4,6 +4,8 @@ import unittest
 
 import time
 
+from datetime import datetime
+
 import random
 
 import hn.api as hnapi
@@ -21,12 +23,24 @@ from nltk.corpus import stopwords
 # web API
 from flask import Flask
 
+
+
+
+# Initialize flask api server
 app = Flask(__name__)
 
 @app.route("/")
 def get_trending():
     return main()
 #end
+
+# Initialize templates
+
+from jinja2 import Environment, PackageLoader, select_autoescape
+jinja_env = Environment(
+    loader=PackageLoader("trending"),
+    autoescape=select_autoescape()
+)
 
 def get_unique(ls):
     unique_terms = set(ls)
@@ -56,7 +70,7 @@ def main(debug=False):
         if debug:
             print("title: " + j["title"])
         #end
-        title_list = title_list + " " + j["title"]
+        title_list = title_list + "// " + j["title"]
     #loop
     
     print("title_list:" + title_list)
@@ -85,8 +99,13 @@ def main(debug=False):
 
     # Dict with uniquw trending terms
     print("unique_filtered_string:" + unique_filtered_string)
+    # Get date in %d/%m/%Y %H:%M:%S
+    now = datetime.now()
+    dt_string = now.strftime("%m/%d/%Y %H:%M:%S")
     trending_terms = {
-        "trending": unique_filtered_string
+        "date": dt_string,
+        "posts": title_list,
+        "terms": unique_filtered_string
     }
 
     # Transform dictionary to Json
@@ -109,7 +128,14 @@ def main(debug=False):
     # hn.cache_posts('top')
     # hn.cache_posts('best')
     # hn.cache_all_items()
-    return trending_terms_as_json
+    
+    # html template
+    template = jinja_env.get_template("index.html")
+    rendered_template = template.render(result=trending_terms)
+
+
+    # return trending_terms_as_json
+    return rendered_template
 #end
 
 if __name__ == "__main__":
