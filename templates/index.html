@@ -1,3 +1,19 @@
+<h2>Trending on HN</h2>
+
+<!-- we have to inject enumerate manually -->
+{% for idx, item in enumerate(posts,start=1) %}
+    
+    <div>
+            <!-- Post -->
+            Post {{ idx }}:
+            <!-- Item -->
+            {{ item.title }}
+
+            <a href="{{ item.url }}">link</a>
+        <br>
+    </div>
+{% endfor %}
+
 <table>
     <thead>
       <tr>
@@ -6,11 +22,14 @@
       </tr>
     </thead>
     <tbody>
-    {% for key, value in result.items() %}
+    {% for key, value in dict.items() %}
      <tr>
          <td> {{ key }} </td>
          <td> {{ value }} </td>
      </tr>
     {% endfor %}
     </tbody>
-  </table>
+</table>
+
+
+
