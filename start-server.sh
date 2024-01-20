@@ -1,8 +1,14 @@
 main() {
-    echo 'starting server'
+    
     if [[ $# -eq 0 ]]
     then
-        return
+        # Add your code here
+        echo 'activating virtual env..'
+        . ../venv/bin/activate
+        echo 'installing dependencies..'
+        python3 -m pip install -r requirements.txt
+        echo 'starting server'
+        python3 -m flask --app trending.py --debug run
     fi
     args=( "$@" )
     args_no_last=( ${@:1:$#-1} )
@@ -12,8 +18,7 @@ main() {
         echo "$arg"
     done
 
-    # Add your code here
-    python3 -m flask --app trending.py --debug run
+
 }
 
 main "$@"
